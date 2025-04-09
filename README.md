@@ -1,4 +1,4 @@
-# 🎓 Web Pendaftaran ARMASO
+# 🎓 Web Pendaftaran
 
 Aplikasi pendaftaran lomba berbasis Laravel. Dirancang khusus untuk memudahkan proses pendaftaran, verifikasi, manajemen pembayaran, dan cetak kartu peserta dalam satu sistem yang terintegrasi dan fleksibel.
 
@@ -9,11 +9,11 @@ Aplikasi pendaftaran lomba berbasis Laravel. Dirancang khusus untuk memudahkan p
 ### ✅ Pendaftaran Peserta
 - Registrasi akun & login peserta
 - Pengisian data diri lengkap (Nama, NISN, TTL, Sekolah, dll)
-- Memilih lebih dari satu mapel lomba (IPA, IPS, MTK)
+- Memilih lebih dari satu mapel lomba (IPA, IPS, MTK) atau bisa di isi dengan yang lain
 
 ### 🔢 Nomor Peserta Otomatis
 - Nomor peserta dibuat otomatis saat data diisi
-- Format dinamis, misal: `ARMASO250001`, `NAMAWEB250002` (mengikuti nama web global)
+- Format dinamis, misal: `NAMAWEB250002` (mengikuti nama web global)
 
 ### 💸 Sistem Pembayaran & Tagihan
 - Perhitungan tagihan otomatis berdasarkan jumlah mapel
@@ -27,7 +27,7 @@ Aplikasi pendaftaran lomba berbasis Laravel. Dirancang khusus untuk memudahkan p
 
 ### 🧠 Guest vs User Experience
 - **User Login (Peserta)**: Lihat status data, status pembayaran, cetak kartu
-- **Guest**: Hanya melihat informasi umum lomba
+- **Guest**: Hanya melihat informasi umum
 
 ### 🛠️ Admin Panel Lengkap
 - Verifikasi data peserta
@@ -37,11 +37,8 @@ Aplikasi pendaftaran lomba berbasis Laravel. Dirancang khusus untuk memudahkan p
 - Kelola mapel lomba dan pengaturan global branding
 
 ### 📤📥 Export / Import Excel
-- Export data peserta dengan filter:
-  - Jenis pendaftaran (Online, Offline, Kolektif)
-  - Status verifikasi
-  - Mapel lomba
-- Import data peserta secara massal dari file Excel
+- Export data peserta dan tagiahan maupun pembayaran
+- Import data peserta secara massal dari file Excel (khusus Kolektif)
 
 ### 🌐 Konfigurasi Multi Web
 - Web branding & pendaftaran bisa dipisah (domain/subdomain berbeda)
