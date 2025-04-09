@@ -2,7 +2,10 @@
 
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
+//auth
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -49,9 +52,29 @@ use App\Http\Controllers\Admin\ExportController;
 |
 */
 
+
+// Root route khusus
 Route::get('/', function () {
-    return view(view: 'welcome');
+    $pathToFile = public_path('web/index.html');
+
+    if (!File::exists($pathToFile)) {
+        abort(404);
+    }
+
+    return Response::file($pathToFile);
 });
+
+// Catch-all route untuk frontend SPA
+Route::get('/{any}', function ($any) {
+    $pathToFile = public_path('web/index.html');
+
+    if (!File::exists($pathToFile)) {
+        abort(404);
+    }
+
+    return Response::file($pathToFile);
+})->where('any', '^(?!api|admin|storage|web\/static|password|register|login|qrc|pengumuman|persyaratan|kontakadmin).*$');
+
 
 Route::get('/password/request', [PasswordResetController::class, 'showRequestForm'])->name('password.request.form');
 Route::post('/password/request', [PasswordResetController::class, 'requestReset'])->name('password.request');
