@@ -52,7 +52,6 @@ use App\Http\Controllers\Admin\ExportController;
 |
 */
 
-
 // Root route khusus
 Route::get('/', function () {
     $pathToFile = public_path('web/index.html');
@@ -73,7 +72,7 @@ Route::get('/{any}', function ($any) {
     }
 
     return Response::file($pathToFile);
-})->where('any', '^(?!api|admin|storage|web\/static|password|register|login|qrc|pengumuman|persyaratan|kontakadmin).*$');
+})->where('any', '^(?!api|admin|auth|test|home|logout|storage|web\/static|password|register|login|qrc|pengumuman|persyaratan|kontakadmin).*$');
 
 
 Route::get('/password/request', [PasswordResetController::class, 'showRequestForm'])->name('password.request.form');

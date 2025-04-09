@@ -50,22 +50,33 @@ class Handler extends ExceptionHandler
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)
-{
-    if ($request->expectsJson()) {
-        return response()->json(['message' => $exception->getMessage()], 401);
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $exception->getMessage()], 401);
+        }
+
+        $guard = data_get($exception->guards(), 0);
+
+        switch ($guard) {
+            case 'admin':
+                $login = route('auth.loginAdmin');
+                break;
+            default:
+                $login = route('auth.login');
+                break;
+        }
+
+        return redirect()->guest($login);
     }
 
-    $guard = data_get($exception->guards(), 0);
+    public function render($request, Throwable $exception)
+    {
+        if ($this->isHttpException($exception)) {
+            if ($exception->getStatusCode() == 404) {
+                return response()->view('errors.404', [], 404);
+            }
+        }
 
-    switch ($guard) {
-        case 'admin':
-            $login = route('auth.loginAdmin');
-            break;
-        default:
-            $login = route('auth.login');
-            break;
+        return parent::render($request, $exception);
     }
-
-    return redirect()->guest($login);
-}
 }
