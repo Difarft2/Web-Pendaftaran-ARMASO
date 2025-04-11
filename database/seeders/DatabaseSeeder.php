@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Database\Seeders\infoRekening;
 use Database\Seeders\settingweb;
+use Database\Seeders\modeset;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             infoRekening::class,
             settingweb::class,
+            modeset::class,
         ]);
     }
 }

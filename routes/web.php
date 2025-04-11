@@ -1,44 +1,43 @@
 <?php
-
-
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 
 //auth
-use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\AdminController;
 
 //external
-use App\Http\Controllers\persyaratanExternal;
-use App\Http\Controllers\kontakadminExternal;
+use App\Exports\DataExport;
+use App\Imports\KolektifImport;
 use App\Http\Controllers\pengumumanExternal;
-use App\Http\Controllers\Peserta\CetakPDFController;
+use App\Http\Controllers\kontakadminExternal;
+use App\Http\Controllers\persyaratanExternal;
 
 //user
+use App\Http\Controllers\Peserta\TagihanController;
+use App\Http\Controllers\Peserta\CetakPDFController;
+use App\Http\Controllers\Peserta\DatadiriController;
 use App\Http\Controllers\Peserta\DashboardController;
 use App\Http\Controllers\Peserta\kontakdansyaratController;
-use App\Http\Controllers\Peserta\TagihanController;
-use App\Http\Controllers\Peserta\DatadiriController;
 
 //admin
-use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\admin\kontakadminContoller;
-use App\Http\Controllers\Admin\rekeningController;
-use App\Http\Controllers\Admin\settingwebController;
-use App\Http\Controllers\Admin\persyaratanController;
-use App\Http\Controllers\Admin\DafatarakunController;
-use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\InfolombaController;
-use App\Http\Controllers\Admin\DatadiripesertaController;
-use App\Http\Controllers\Admin\PembayaranpesertaController;
+use App\Http\Controllers\admin\kontakadminContoller;
+use App\Http\Controllers\Admin\PengumumanController;
+use App\Http\Controllers\Admin\settingwebController;
+use App\Http\Controllers\Admin\DafatarakunController;
+use App\Http\Controllers\Admin\persyaratanController;
 use App\Http\Controllers\Admin\TagihanPeserta;
 use App\Http\Controllers\Admin\DaftarofflineController;
+use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\DatadiripesertaController;
+use App\Http\Controllers\Admin\PembayaranpesertaController;
 use App\Http\Controllers\Admin\ImportdatakolektifController;
-use App\Imports\KolektifImport;
-use App\Exports\DataExport;
 use App\Http\Controllers\Admin\ExportController;
+use App\Http\Controllers\Admin\ControllController;
+use App\Http\Controllers\Admin\rekeningController;
 
 
 /*
@@ -52,77 +51,83 @@ use App\Http\Controllers\Admin\ExportController;
 |
 */
 
-// Root route khusus
-Route::get('/', function () {
-    $pathToFile = public_path('web/index.html');
 
-    if (!File::exists($pathToFile)) {
-        abort(404);
-    }
+Route::middleware('maintenance.mode')->group(function () {
+    // Root route khusus
+    Route::get('/', function () {
+        $pathToFile = public_path('web/index.html');
 
-    return Response::file($pathToFile);
-});
+        if (!File::exists($pathToFile)) {
+            abort(404);
+        }
 
-// Catch-all route untuk frontend SPA
-Route::get('/{any}', function ($any) {
-    $pathToFile = public_path('web/index.html');
+        return Response::file($pathToFile);
+    });
 
-    if (!File::exists($pathToFile)) {
-        abort(404);
-    }
+    // Catch-all route untuk frontend SPA
+    Route::get('/{any}', function ($any) {
+        $pathToFile = public_path('web/index.html');
 
-    return Response::file($pathToFile);
-})->where('any', '^(?!api|admin|auth|test|home|logout|storage|web\/static|password|register|login|qrc|pengumuman|persyaratan|kontakadmin).*$');
+        if (!File::exists($pathToFile)) {
+            abort(404);
+        }
 
-
-Route::get('/password/request', [PasswordResetController::class, 'showRequestForm'])->name('password.request.form');
-Route::post('/password/request', [PasswordResetController::class, 'requestReset'])->name('password.request');
-
-Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])
-    ->name('password.reset.form')
-    ->middleware('signed');
-
-Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])
-    ->name('password.reset');
-
-    Route::get('/qrc/{token}', [CetakPDFController::class, 'show'])->name('qr.show');
-    Route::get('/pengumuman', [pengumumanExternal::class, 'index'])->name('pengumuman');
-    Route::get('/persyaratan', [persyaratanExternal::class, 'index'])->name('persyaratan');
-    Route::get('/kontakadmin', [kontakadminExternal::class, 'index'])->name('kontakadmin');
+        return Response::file($pathToFile);
+    })->where('any', '^(?!api|admin|auth|test|home|logout|storage|web\/static|password|register|login|qrc|pengumuman|persyaratan|kontakadmin).*$');
 
 
-//rote untuk guest
-Route::group(['middleware' => 'guest'], function () {
-    Route::get('/register', [UserController::class, 'register'])->name('auth.register');
-    Route::post('/register', [UserController::class, 'registerPost'])->name('auth.register');
-    Route::get('/login', [UserController::class, 'login'])->name('auth.login');
-    Route::post('/login', [UserController::class, 'loginPost'])->name('auth.login');
-});
+    Route::get('/password/request', [PasswordResetController::class, 'showRequestForm'])->name('password.request.form');
+    Route::post('/password/request', [PasswordResetController::class, 'requestReset'])->name('password.request');
 
-//route untuk peserta
-Route::middleware(['auth'])->group(function () {
-    // Dashboard User
-    Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/home/kontakadmin', [kontakdansyaratController::class, 'kontakadmin'])->name('peserta.kontakadmin');
-    Route::get('/home/persyaratanperserta', [kontakdansyaratController::class, 'syarat'])->name('peserta.persyaratan');
-    Route::get('/home/profil', [UserController::class, 'profil'])->name('peserta.profil');
+    Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])
+        ->name('password.reset.form')
+        ->middleware('signed');
 
-    //tagihan
-    Route::get('/home/tagihan', [TagihanController::class, 'index'])->name('peserta.tagihan.tagihan');
-    Route::post('/home/tagihan/upload/{id}', [TagihanController::class, 'uploadBukti'])->name('tagihan.upload');
-    Route::get('/home/tagihan/cetak-tagihan/{id}', [CetakPDFController::class, 'cetakTagihan'])->name('tagihan.cetakpeserta');
+    Route::post('/password/reset', [PasswordResetController::class, 'resetPassword'])
+        ->name('password.reset');
 
-    //data diri
-    Route::get('/home/dataperserta', [DatadiriController::class, 'index'])->name('peserta.datadiri.index');
-    Route::get('/home/dataperserta/create', [DatadiriController::class, 'create'])->name('datadiri.create');
-    Route::post('/home/dataperserta', [DatadiriController::class, 'store'])->name('datadiri.store');
-    Route::get('/home/dataperserta/edit', [DatadiriController::class, 'edit'])->name('datadiri.edit');
-    Route::put('/home/dataperserta/update', [DatadiriController::class, 'update'])->name('datadiri.update');
-    Route::post('/home/dataperserta/pilih-mapel', [TagihanController::class, 'pilihMapel'])->name('datadiri.pilihMapel');
-    Route::get('/home/peserta/cetak-kartu-peserta/{id}', [CetakPDFController::class, 'cetakKartuPeserta'])->name('cetak.kartupeserta');
+        Route::get('/qrc/{token}', [CetakPDFController::class, 'show'])->name('qr.show');
+        Route::get('/pengumuman', [pengumumanExternal::class, 'index'])->name('pengumuman');
+        Route::get('/persyaratan', [persyaratanExternal::class, 'index'])->name('persyaratan');
+        Route::get('/kontakadmin', [kontakadminExternal::class, 'index'])->name('kontakadmin');
 
-    // Logout User
-    Route::post('/logout', [UserController::class, 'logout'])->name('auth.logout');
+    Route::middleware('registration.closed')->group(function () {
+    //rote untuk guest
+        Route::group(['middleware' => 'guest'], function () {
+            Route::get('/register', [UserController::class, 'register'])->name('auth.register');
+            Route::post('/register', [UserController::class, 'registerPost'])->name('auth.register');
+            Route::get('/login', [UserController::class, 'login'])->name('auth.login');
+            Route::post('/login', [UserController::class, 'loginPost'])->name('auth.login');
+        });
+    });
+
+
+    //route untuk peserta
+    Route::middleware(['auth'])->group(function () {
+        // Dashboard User
+        Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/home/kontakadmin', [kontakdansyaratController::class, 'kontakadmin'])->name('peserta.kontakadmin');
+        Route::get('/home/persyaratanperserta', [kontakdansyaratController::class, 'syarat'])->name('peserta.persyaratan');
+        Route::get('/home/profil', [UserController::class, 'profil'])->name('peserta.profil');
+
+        //tagihan
+        Route::get('/home/tagihan', [TagihanController::class, 'index'])->name('peserta.tagihan.tagihan');
+        Route::post('/home/tagihan/upload/{id}', [TagihanController::class, 'uploadBukti'])->name('tagihan.upload');
+        Route::get('/home/tagihan/cetak-tagihan/{id}', [CetakPDFController::class, 'cetakTagihan'])->name('tagihan.cetakpeserta');
+
+        //data diri
+        Route::get('/home/dataperserta', [DatadiriController::class, 'index'])->name('peserta.datadiri.index');
+        Route::get('/home/dataperserta/create', [DatadiriController::class, 'create'])->name('datadiri.create');
+        Route::post('/home/dataperserta', [DatadiriController::class, 'store'])->name('datadiri.store');
+        Route::get('/home/dataperserta/edit', [DatadiriController::class, 'edit'])->name('datadiri.edit');
+        Route::put('/home/dataperserta/update', [DatadiriController::class, 'update'])->name('datadiri.update');
+        Route::post('/home/dataperserta/pilih-mapel', [TagihanController::class, 'pilihMapel'])->name('datadiri.pilihMapel');
+        Route::get('/home/peserta/cetak-kartu-peserta/{id}', [CetakPDFController::class, 'cetakKartuPeserta'])->name('cetak.kartupeserta');
+
+        // Logout User
+        Route::post('/logout', [UserController::class, 'logout'])->name('auth.logout');
+    });
+
 });
 
 
@@ -172,6 +177,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/settingweb', [settingwebController::class, 'index'])->name('settingweb.index');
     Route::get('/admin/settingweb/edit', [settingwebController::class, 'editsettingweb'])->name('settingweb.edit');
     Route::post('/admin/settingweb/update', [settingwebController::class, 'updateSettingweb'])->name('settingweb.update');
+    Route::post('/admin/settingweb/toggle-maintenance', [ControllController::class, 'toggleMaintenance'])->name('admin.toggle.maintenance');
+    Route::post('/admin/settingweb/toggle-registration', [ControllController::class, 'toggleRegistration'])->name('admin.toggle.registration');
+
 
     //reset password user
     Route::get('/admin/password-requests', [PasswordResetController::class, 'showAdminRequests'])->name('admin.password.requests');
