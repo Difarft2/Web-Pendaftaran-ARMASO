@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
-use App\Models\settingwebs;
+use App\Models\Settingwebs;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,17 +28,12 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Cek apakah tabel settingwebs sudah ada
-        if (Schema::hasTable('settingwebs')) {
-            // Menampilkan data settingweb di semua halaman
+        if (Schema::hasTable('settingwebs')) { // Pastikan menggunakan huruf kecil untuk nama tabel
+            // Menampilkan data settingweb di semua halaman menggunakan composer
             view()->composer('*', function ($view) {
                 $settingweb = Settingwebs::first(); // Ambil data pertama
-                $view->with('settingweb', $settingweb);
+                $view->with('settingweb', $settingweb); // Kirim data ke semua view
             });
-
-            // Menampilkan data settingweb di semua halaman
-            $setting = Settingwebs::first();
-            view()->share('settingweb', $setting);
-            view()->share('single_settingweb', $setting->nama_website ?? '');
         }
     }
 }

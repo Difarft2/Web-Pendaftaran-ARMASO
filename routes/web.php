@@ -24,9 +24,9 @@ use App\Http\Controllers\Peserta\kontakdansyaratController;
 
 //admin
 use App\Http\Controllers\Admin\InfolombaController;
-use App\Http\Controllers\admin\kontakadminContoller;
+use App\Http\Controllers\Admin\kontakadminContoller;
 use App\Http\Controllers\Admin\PengumumanController;
-use App\Http\Controllers\Admin\settingwebController;
+use App\Http\Controllers\Admin\SettingwebController;
 use App\Http\Controllers\Admin\DafatarakunController;
 use App\Http\Controllers\Admin\persyaratanController;
 use App\Http\Controllers\Admin\TagihanPeserta;
@@ -163,7 +163,7 @@ Route::middleware('auth:admin')->group(function () {
     //rekening
     Route::get('/admin/rekening', [rekeningController::class, 'index'])->name('rekening.index');
     Route::get('/admin/rekening/edit', [rekeningController::class, 'editRekening'])->name('rekening.edit');
-    Route::post('/admin/rekening/update', [rekeningController::class, 'updateRekening'])->name('rekening.update');
+    Route::put('/admin/rekening/update', [rekeningController::class, 'updateRekening'])->name('rekening.update');
 
     //kontak admin
     Route::get('/admin/kontakadmin', [kontakadminContoller::class, 'index'])->name('kontakadmin.index');

@@ -117,7 +117,7 @@ class DaftarofflineController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.ofline.show', compact('peserta'));
+        return view('admin.datadiripeserta.ofline.show', compact('peserta'));
     }
 
     public function edit($id)
@@ -125,7 +125,7 @@ class DaftarofflineController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.ofline.edit', compact('peserta'));
+        return view('admin.datadiripeserta.ofline.edit', compact('peserta'));
     }
 
     public function update(Request $request, $id)

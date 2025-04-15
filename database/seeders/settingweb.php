@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\settingwebs;
+use App\Models\Settingwebs;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +15,7 @@ class settingweb extends Seeder
      */
     public function run()
     {
-        settingwebs::create([
+        Settingwebs::create([
             'nama_website' => 'website',
             'deskripsi_website' => 'website',
             'no_peserta_website' => 'website',

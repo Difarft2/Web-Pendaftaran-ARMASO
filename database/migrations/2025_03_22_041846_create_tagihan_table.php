@@ -25,7 +25,7 @@ class CreateTagihanTable extends Migration
             $table->timestamps();
 
             // Menambahkan relasi ke tabel data_diri
-            $table->foreign('id')->references('id')->on('datadiri')->onDelete('cascade');
+            $table->foreign('datadiri_id')->references('id')->on('datadiri')->onDelete('cascade');
         });
     }
 

@@ -36,7 +36,7 @@ class DatadiripesertaController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.online.show', compact('peserta'));
+        return view('admin.datadiripeserta.online.show', compact('peserta'));
     }
 
     public function edit($id)
@@ -44,7 +44,7 @@ class DatadiripesertaController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.online.edit', compact('peserta'));
+        return view('admin.datadiripeserta.online.edit', compact('peserta'));
     }
 
     public function update(Request $request, $id)
@@ -90,7 +90,7 @@ class DatadiripesertaController extends Controller
             ->get();
 
         $dataTidakvalid = DataDiri::with('tagihan')
-            ->where('status_data', 'belumvalid_')
+            ->where('status_data', 'belum_valid')
             ->get();
 
         $infolombas = Infolomba::all();

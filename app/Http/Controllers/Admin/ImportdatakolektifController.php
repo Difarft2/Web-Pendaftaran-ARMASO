@@ -50,7 +50,7 @@ class ImportdatakolektifController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.kolektif.show', compact('peserta'));
+        return view('admin.datadiripeserta.kolektif.show', compact('peserta'));
     }
 
     public function edit($id)
@@ -58,7 +58,7 @@ class ImportdatakolektifController extends Controller
         // Ambil data peserta berdasarkan ID
         $peserta = DataDiri::findOrFail($id);
 
-        return view('Admin.datadiripeserta.kolektif.edit', compact('peserta'));
+        return view('admin.datadiripeserta.kolektif.edit', compact('peserta'));
     }
 
     public function update(Request $request, $id)

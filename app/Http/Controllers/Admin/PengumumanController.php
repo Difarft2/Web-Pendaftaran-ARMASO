@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengumuman;
+use App\Models\pengumuman;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -25,7 +25,7 @@ class PengumumanController extends Controller
                 'isi' => 'required',
             ]);
 
-            Pengumuman::create([
+            pengumuman::create([
                 'judul' => $request->judul,
                 'jenis' => $request->jenis,
                 'isi' => $request->isi,
@@ -44,7 +44,7 @@ class PengumumanController extends Controller
     // Menampilkan semua pengumuman
     public function index()
     {
-        $pengumuman = Pengumuman::all();
+        $pengumuman = pengumuman::all();
         return view('admin.pengumuman.index', compact('pengumuman'));
     }
 
@@ -52,7 +52,7 @@ class PengumumanController extends Controller
     public function edit($id)
     {
         try {
-            $pengumuman = Pengumuman::findOrFail($id);
+            $pengumuman = pengumuman::findOrFail($id);
             return view('admin.pengumuman.edit', compact('pengumuman'));
         } catch (\Exception $e) {
             Alert::error('Error', 'Pengumuman tidak ditemukan: ' . $e->getMessage());
@@ -70,7 +70,7 @@ class PengumumanController extends Controller
                 'jenis' => 'required|in:internal,eksternal',
             ]);
 
-            $pengumuman = Pengumuman::findOrFail($id);
+            $pengumuman = pengumuman::findOrFail($id);
             $pengumuman->judul = $request->judul;
             $pengumuman->isi = $request->isi;
             $pengumuman->jenis = $request->jenis;
@@ -88,7 +88,7 @@ class PengumumanController extends Controller
     public function hapusPengumuman($id)
     {
         try {
-            $pengumuman = Pengumuman::findOrFail($id);
+            $pengumuman = pengumuman::findOrFail($id);
             $pengumuman->delete();
 
             Alert::success('Sukses', 'Pengumuman berhasil dihapus!');

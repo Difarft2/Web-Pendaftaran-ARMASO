@@ -10,6 +10,7 @@
         <div class="card-body">
             <form action="{{ route('rekening.update') }}" method="POST">
                 @csrf
+                @method('PUT')
 
                 <div class="mb-3">
                     <label for="nama" class="form-label">Nama</label>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Rekening;
+use App\Models\rekening;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,7 +13,7 @@ class rekeningController extends Admin
     // Menampilkan data rekening
     public function index()
     {
-        $rekening = Rekening::all();
+        $rekening = rekening::all();
         return view('admin.rekening.index', compact('rekening'));
     }
 
@@ -21,7 +21,7 @@ class rekeningController extends Admin
     public function editRekening()
     {
         try {
-            $rekening = Rekening::first(); // Ambil data pertama
+            $rekening = rekening::first(); // Ambil data pertama
             if (!$rekening) {
                 Alert::error('Error', 'Data rekening belum tersedia!');
                 return redirect()->route('rekening.index');
@@ -46,7 +46,7 @@ class rekeningController extends Admin
                 'deskripsi' => 'nullable|string',
             ]);
 
-            $rekening = Rekening::first(); // Ambil data pertama
+            $rekening = rekening::first(); // Ambil data pertama
             if (!$rekening) {
                 Alert::error('Error', 'Data rekening tidak ditemukan!');
                 return redirect()->route('rekening.index');

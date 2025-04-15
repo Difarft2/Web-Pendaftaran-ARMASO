@@ -5,7 +5,7 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use App\Models\SettingWebs;
+use App\Models\Settingwebs;
 use App\Models\DataDiri;
 use App\Models\Tagihan;
 use App\Models\Infolomba;
@@ -25,7 +25,7 @@ class KolektifImport implements ToCollection
 
     public function collection(Collection $rows)
     {
-        $setting = SettingWebs::first();
+        $setting = Settingwebs::first();
         $formatNomorPeserta = $setting ? $setting->no_peserta_website : 'ARMASO25';
 
         $lastPeserta = DataDiri::where('nomor_peserta', 'like', $formatNomorPeserta . '%')
