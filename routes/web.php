@@ -179,6 +179,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/settingweb/update', [settingwebController::class, 'updateSettingweb'])->name('settingweb.update');
     Route::post('/admin/settingweb/toggle-maintenance', [ControllController::class, 'toggleMaintenance'])->name('admin.toggle.maintenance');
     Route::post('/admin/settingweb/toggle-registration', [ControllController::class, 'toggleRegistration'])->name('admin.toggle.registration');
+    Route::post('/admin/settingweb/reset-data', [ControllController::class, 'toggleResetData'])->name('hapus.semuadata');
 
 
     //reset password user

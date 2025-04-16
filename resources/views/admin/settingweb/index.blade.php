@@ -67,5 +67,37 @@
                 Toggle Pendaftaran
             </button>
         </form>
+        <br>
+
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-700">Reset Data</h2>
+        </div>
+        <button class="btn btn-danger" data-toggle="modal" data-target="#Modalreset">
+            RESET
+        </button>
     </div>
-    @endsection
+</div>
+
+
+<div class="modal fade" id="Modalreset" role=" dialog" aria-labelledby="Modalreset" aria-hidden=" true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('hapus.semuadata') }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Masukkan password admin untuk menghapus semua data:</p>
+                    <input type="password" name="password" class="form-control" placeholder="Password admin" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus Sekarang</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
